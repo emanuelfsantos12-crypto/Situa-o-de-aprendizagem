@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação Comunitária - Sistema de Gestão</title>
+    <link rel="stylesheet" href="resouces/css/style.css">
+    <script src="resouces/script/scrip.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-tree"></i>
+                <span>Associação Comunitária</span>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</button></li>
+                    <li><button class="nav-btn" onclick="switchTab('moradores')"><i class="fa-solid fa-users"></i> Moradores</button></li>
+                    <li><button class="nav-btn" onclick="switchTab('solicitacoes')"><i class="fa-solid fa-clipboard-list"></i> Solicitações</button></li>
+                    <li><button class="nav-btn" onclick="switchTab('requisitos')"><i class="fa-solid fa-file-lines"></i> Requisitos</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container">
+
+        <!-- ABA 1: DASHBOARD -->
+        <section id="dashboard" class="tab-content active">
+            <h2>Visão Geral da Comunidade</h2>
+            <div class="metrics-grid">
+                <div class="card metric-card">
+                    <div class="metric-icon green"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <p class="metric-title">Moradores Cadastrados</p>
+                        <h3 id="dash-total-moradores">0</h3>
+                    </div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-icon yellow"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <p class="metric-title">Solicitações Pendentes</p>
+                        <h3 id="dash-solicitacoes-pendentes">0</h3>
+                    </div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-icon dark-green"><i class="fa-solid fa-check-circle"></i></div>
+                    <div>
+                        <p class="metric-title">Solicitações Concluídas</p>
+                        <h3 id="dash-solicitacoes-concluidas">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card quick-actions">
+                <h3>Ações Rápidas</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="switchTab('moradores'); abrirModalMorador();">
+                        <i class="fa-solid fa-user-plus"></i> Novo Morador
+                    </button>
+                    <button class="btn btn-secondary" onclick="switchTab('solicitacoes'); abrirModalSolicitacao();">
+                        <i class="fa-solid fa-plus-circle"></i> Nova Solicitação
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: MORADORES (CRUD + BUSCA) -->
+        <section id="moradores" class="tab-content">
+            <div class="section-header">
+                <h2>Gestão de Moradores</h2>
+                <button class="btn btn-primary" onclick="abrirModalMorador()">
+                    <i class="fa-solid fa-user-plus"></i> Cadastrar Morador
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="filter-bar">
+                    <input type="text" id="search-moradores" placeholder="Buscar por nome, CPF ou bairro..." oninput="filtrarMoradores()">
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Telefone</th>
+                                <th>Bairro</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-moradores">
+                            <!-- Preenchido dinamicamente pelo JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: SOLICITAÇÕES -->
+        <section id="solicitacoes" class="tab-content">
+            <div class="section-header">
+                <h2>Acompanhamento de Solicitações</h2>
+                <button class="btn btn-primary" onclick="abrirModalSolicitacao()">
+                    <i class="fa-solid fa-plus-circle"></i> Nova Solicitação
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Morador</th>
+                                <th>Descrição / Categoria</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-solicitacoes">
+                            <!-- Preenchido dinamicamente pelo JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: REQUISITOS -->
+        <section id="requisitos" class="tab-content">
+            <h2>Levantamento de Requisitos do Projeto</h2>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="title-green"><i class="fa-solid fa-list-check"></i> Requisitos Funcionais (RF)</h3>
+                    <ul class="req-list">
+                        <li><strong>RF01:</strong> Cadastrar, editar, listar e excluir moradores.</li>
+                        <li><strong>RF02:</strong> Registrar e atualizar solicitações de moradores.</li>
+                        <li><strong>RF03:</strong> Buscar/filtrar moradores por nome, CPF ou bairro.</li>
+                        <li><strong>RF04:</strong> Exibir métricas da comunidade no dashboard.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="title-green"><i class="fa-solid fa-gears"></i> Requisitos Não Funcionais (RNF)</h3>
+                    <ul class="req-list">
+                        <li><strong>RNF01:</strong> Interface responsiva para mobile e desktop.</li>
+                        <li><strong>RNF02:</strong> Paleta visual baseada em tons de verde.</li>
+                        <li><strong>RNF03:</strong> Persistência local de dados (LocalStorage).</li>
+                        <li><strong>RNF04:</strong> Código limpo usando HTML, CSS e JS nativo.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: CADASTRAR/EDITAR MORADOR -->
+    <div id="modal-morador" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-morador-titulo">Cadastrar Morador</h3>
+                <span class="close-modal" onclick="fecharModalMorador()">&times;</span>
+            </div>
+            <form id="form-morador" onsubmit="salvarMorador(event)">
+                <input type="hidden" id="morador-id">
+                <div class="form-group">
+                    <label for="morador-nome">Nome Completo *</label>
+                    <input type="text" id="morador-nome" required>
+                </div>
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="morador-cpf">CPF *</label>
+                        <input type="text" id="morador-cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="morador-telefone">Telefone *</label>
+                        <input type="text" id="morador-telefone" placeholder="(00) 00000-0000" required>
+                    </div>
+                </div>
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="morador-bairro">Bairro *</label>
+                        <input type="text" id="morador-bairro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="morador-endereco">Endereço</label>
+                        <input type="text" id="morador-endereco">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-gray" onclick="fecharModalMorador()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVA SOLICITAÇÃO -->
+    <div id="modal-solicitacao" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nova Solicitação</h3>
+                <span class="close-modal" onclick="fecharModalSolicitacao()">&times;</span>
+            </div>
+            <form id="form-solicitacao" onsubmit="salvarSolicitacao(event)">
+                <div class="form-group">
+                    <label for="solicitacao-morador">Morador Solicitante *</label>
+                    <select id="solicitacao-morador" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="solicitacao-categoria">Categoria *</label>
+                    <select id="solicitacao-categoria" required>
+                        <option value="Manutenção Urbana">Manutenção Urbana</option>
+                        <option value="Apoio Social">Apoio Social / Doação</option>
+                        <option value="Eventos e Cursos">Eventos / Cursos</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="solicitacao-descricao">Descrição do Pedido *</label>
+                    <textarea id="solicitacao-descricao" rows="3" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-gray" onclick="fecharModalSolicitacao()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
